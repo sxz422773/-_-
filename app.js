@@ -11,7 +11,7 @@ let token='',mode='local',page=1,pages=1,tag='',favorites=false,tags=[],generati
 const pageCache=new Map(),pageLoads=new Map();let cacheEpoch=0;
 const n=x=>Number(x||0).toLocaleString('zh-CN');
 const reviewDate=x=>/^\d{10}$/.test(String(x))?new Date(Number(x)*1000).toLocaleString('zh-CN'):String(x||'');
-async function api(url,data,retry=true){const r=await fetch(localURL(url),data===undefined?{targetAddressSpace:'loopback'}:{method:'POST',targetAddressSpace:'loopback',headers:{'Content-Type':'application/json','X-Local-Token':token},body:JSON.stringify(data)});const j=localAssets(await r.json());if(r.status===403&&data!==undefined&&retry){const fresh=await api('/api/status');token=fresh.token;return api(url,data,false)}if(!r.ok)throw Error(j.error||'请求失败');if(data!==undefined&&['/api/favorite','/api/refresh','/api/live','/api/douban-enrich'].includes(url)){pageCache.clear();pageLoads.clear();cacheEpoch++}return j}
+async function api(url,data,retry=true){const r=await fetch(localURL(url),data===undefined?{cache:'no-store'}:{method:'POST',headers:{'Content-Type':'application/json','X-Local-Token':token},body:JSON.stringify(data)});const j=localAssets(await r.json());if(r.status===403&&data!==undefined&&retry){const fresh=await api('/api/status');token=fresh.token;return api(url,data,false)}if(!r.ok)throw Error(j.error||'请求失败');if(data!==undefined&&['/api/favorite','/api/refresh','/api/live','/api/douban-enrich'].includes(url)){pageCache.clear();pageLoads.clear();cacheEpoch++}return j}
 let searchLabelTimer;let toastTimer;function toast(t){$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),5000)}
 function error(e){toast(e.message||String(e))}
 const genres=['全部','玄幻','奇幻','仙侠','武侠','都市','历史','科幻','游戏','悬疑','灵异','言情','轻小说','同人','军事','竞技','现实'];
@@ -102,9 +102,20 @@ let savedTheme='light';try{savedTheme=localStorage.getItem('book-theme')||'light
 $('#theme').onchange=()=>applyTheme($('#theme').value);
 const initialAuthor=new URLSearchParams(location.search).get('author');if(initialAuthor?.trim()){$('#q').value=initialAuthor;$('#field').value='author_exact';$('#has_intro').checked=false;$('#scopehelp').textContent='已收录的全部作品';document.title=initialAuthor+'的全部作品 · 书间';}
 async function connectLocal(){
+ const button=$('#connectlocal');button.disabled=true;
  $('#localconnectiontext').textContent='正在连接本机服务…';
- try{await updateStatus();await load();$('#localconnectiontext').textContent='已连接本机，书库数据和下载均在你的电脑处理。';$('#localconnection').classList.add('connected')}
- catch(e){$('#localconnectiontext').textContent='尚未连接本机后台。请启动“打开书间”，并在浏览器提示时允许访问本地网络；然后点击重新连接。';$('#localconnection').classList.remove('connected')}
+ try{
+  await updateStatus();
+  $('#localconnection').classList.add('connected');
+  $('#localconnectiontext').textContent='已连接本机，正在加载书库…';
+  await load();
+  $('#localconnectiontext').textContent='已连接本机，书库数据和下载均在你的电脑处理。';
+ }catch(e){
+  const message=e.message||String(e);
+  $('#localconnectiontext').textContent=(e instanceof TypeError?'浏览器未能访问本机服务。请在地址栏左侧的网站设置中允许“本地网络访问”，再重试；也可点击右侧“打开本机入口”直接使用。':'书库加载失败：'+message+'。可点击右侧本机入口继续使用。');
+  $('#localconnection').classList.remove('connected');
+  console.error('Local library connection:',e);
+ }finally{button.disabled=false;button.textContent='重新连接本机'}
 }
 $('#connectlocal').onclick=connectLocal;
 setInterval(()=>{if($('#syncdialog').open)updateStatus().catch(()=>{})},4000);
