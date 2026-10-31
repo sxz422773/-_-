@@ -118,6 +118,8 @@ async function connectLocal(){
  }finally{button.disabled=false;button.textContent='重新连接本机'}
 }
 $('#connectlocal').onclick=connectLocal;
+// Connect once on page open; manual retry remains available.
+connectLocal();
 setInterval(()=>{if($('#syncdialog').open)updateStatus().catch(()=>{})},4000);
 
 async function introStatus(){const r=await api('/api/intro-status');$('#introprogress').textContent=`已入库 ${n(r.total)} 条原文简介，覆盖原书库 ${n(r.local_covered)} 本。`+(r.running?'正在持续采集。':'采集已暂停。')+Object.entries(r.sites?.length?{}:(r.sites||{})).map(([k,v])=>` ${k}：${v.last_title||v.status||''}`).join('');$('#startintros').disabled=r.running;$('#stopintros').disabled=!r.running;}
