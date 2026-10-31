@@ -1,0 +1,894 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>书屿阅读</title><style>
+:root{--bg:#f5f5f7;--page:#fff;--text:#323238;--muted:#919198;--line:#ededf0;--blue:#1b88ee;--hover:#f2f3f5;--width:860px}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px -apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif}body.dark{--bg:#17181a;--page:#222326;--text:#bcbcc1;--muted:#73737b;--line:#303136;--hover:#2d2e32}body.paper{--bg:#e8e4db;--page:#f6f0e3;--text:#4d473e;--muted:#9b9284;--line:#e7dfce;--hover:#ede5d5}button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}input,select{background:var(--page);border:1px solid var(--line);border-radius:6px;padding:11px}button:hover{color:var(--blue)}.topbar{height:72px;max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;color:var(--muted)}.brand{font-size:22px;color:var(--text);font-weight:650;letter-spacing:2px;display:flex;align-items:center;gap:10px}.brand svg{color:#1687ed}.topnav{display:flex;gap:24px;align-items:center}.topnav button{padding:10px 0}.topnav .import{color:var(--blue)}#headerBook{max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.sheet{max-width:var(--width);min-height:calc(100vh - 72px);margin:0 auto;background:var(--page);border:1px solid var(--line);border-bottom:0}.sheet-head{height:66px;margin:0 60px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px}.sheet-head span:last-child{font-size:11px}.welcome{padding:74px 72px 50px}.welcome h1{font-size:28px;letter-spacing:1px;font-weight:500;margin:0 0 24px}.welcome p{font-size:16px;line-height:2;color:var(--muted)}.dropzone{border:1px dashed #d6d8df;border-radius:10px;padding:42px 20px;text-align:center;margin:38px 0 18px;cursor:pointer;transition:.2s}.dropzone:hover{border-color:var(--blue);background:var(--hover)}.dropzone svg{color:#a7adb7;margin-bottom:12px}.dropzone b{display:block;font-size:17px;font-weight:500}.dropzone p{font-size:13px;margin:10px 0 20px}.primary{border-radius:24px;padding:12px 27px;background:var(--blue);color:white}.primary:hover{color:white;background:#087add}.format-hint{text-align:center;font-size:11px!important;color:var(--muted);line-height:1.8!important}.library-head{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:30px 0 20px;margin-top:40px}.library-head h2{font-size:17px;font-weight:500;margin:0}#filter{width:160px;border:0;background:var(--hover);padding:8px 12px;font-size:12px}#shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 22px}.card{min-width:0;position:relative}.cover{height:150px;width:110px;border-radius:2px 5px 5px 2px;background:#74858e;color:#fff;padding:22px 12px 16px 18px;font:19px/1.5 'SimSun',serif;box-shadow:2px 3px 7px #0002;border-left:5px solid #ffffff25;overflow:hidden;cursor:pointer}.card:nth-child(3n+2) .cover{background:#938576}.card:nth-child(3n) .cover{background:#78847a}.card p{font-size:11px;color:var(--muted);margin:12px 0}.card button{padding:0;margin-right:14px;font-size:12px}.card button:last-child{color:var(--muted)}.empty{grid-column:1/-1;color:var(--muted);font-size:13px;padding:10px 0 20px}.library-footer{display:flex;justify-content:space-between;margin-top:40px;color:var(--muted);font-size:12px}#status{font-size:12px;line-height:1.7;color:var(--blue)}#reader{display:none}.book-head{padding:44px 64px 6px}.book-head h2{font-size:25px;font-weight:500;line-height:1.6;margin:0 0 12px}.book-head p{font-size:12px;color:var(--muted)}article{padding:18px 64px 80px;white-space:pre-wrap;overflow-wrap:anywhere;font:20px/1.95 'Microsoft YaHei',sans-serif;letter-spacing:.5px}#rail{position:fixed;left:calc(50% + 458px);top:210px;display:flex;flex-direction:column;gap:16px}.rail-button{width:46px;height:46px;background:var(--page);border:1px solid var(--line);border-radius:50%;color:#8c8e96;display:grid;place-items:center;position:relative}.rail-button svg{width:21px;height:21px}.rail-button:after{content:attr(data-label);position:absolute;left:56px;white-space:nowrap;background:#32343a;color:white;padding:6px 9px;border-radius:4px;font-size:12px;opacity:0;pointer-events:none}.rail-button:hover:after{opacity:1}.reader-only{display:none}.reading .reader-only{display:grid}.reading #headerBook{display:block}.reading .home-only{display:none}#progressbar{height:2px;background:var(--blue);position:fixed;top:0;left:0;z-index:15;width:0}#bottomProgress{position:fixed;bottom:28px;left:calc(50% + 459px);font-size:11px;color:var(--muted);text-align:center;width:46px}.panel{position:fixed;top:90px;left:calc(50% + 120px);width:310px;max-height:75vh;overflow:auto;background:var(--page);border:1px solid var(--line);box-shadow:0 12px 50px #0002;border-radius:10px;z-index:22;padding:24px}.panel[hidden]{display:none}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;font-size:17px}.panel-head button{font-size:23px;color:var(--muted)}.settings-row{margin:22px 0}.settings-label{color:var(--muted);font-size:12px;margin-bottom:12px}.segmented{display:flex;background:var(--hover);border-radius:7px;padding:4px;gap:4px}.segmented button{flex:1;border-radius:5px;padding:9px}.segmented button:hover{background:var(--page)}.swatches{display:flex;gap:15px}.swatches button{border:1px solid #ccc;width:42px;height:42px;border-radius:50%}.swatches button:nth-child(1){background:white}.swatches button:nth-child(2){background:#f6f0e3}.swatches button:nth-child(3){background:#cfe4d3}.swatches button:nth-child(4){background:#222326}.setting-action{display:block;width:100%;padding:12px 0;text-align:left;border-top:1px solid var(--line)}#chapters button{display:block;text-align:left;width:100%;padding:13px 8px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.7}#chapters button.active{color:var(--blue)}#toc{display:none}#searchPanel input{width:100%}#searchResults button{display:block;text-align:left;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;width:100%}dialog{border:1px solid var(--line);border-radius:12px;background:var(--page);color:var(--text);width:480px;max-width:90vw;padding:28px}dialog::backdrop{background:#0004}dialog h2{font-size:18px;font-weight:500}#notes>div{padding:18px 0;border-bottom:1px solid var(--line);font-size:14px;white-space:pre-wrap;line-height:1.8}#notes button{color:var(--blue);display:block;margin-top:8px}.toast{position:fixed;bottom:45px;left:50%;transform:translateX(-50%);background:#30323ce8;color:white;border-radius:24px;padding:12px 24px;z-index:100;font-size:13px;pointer-events:none;opacity:0;transition:.2s}.toast.show{opacity:1}.dragging:after{content:'松开，开始阅读';position:fixed;inset:16px;border:2px dashed #1b88ee;background:#eef6fff2;display:grid;place-items:center;font-size:26px;color:#1b88ee;z-index:99;border-radius:14px;pointer-events:none}body.green{--bg:#bed4c3;--page:#d3e6d7;--text:#334d3b;--line:#bbd3c1;--hover:#c3dbca}::selection{background:#b9dcff}#selectionNote{position:absolute;background:#333641;color:white;border-radius:8px;padding:10px 18px;z-index:25;box-shadow:0 4px 20px #0002}#selectionNote[hidden]{display:none}@media(min-width:1600px){.topbar{max-width:1400px}}@media(max-width:1100px){#rail{left:auto;right:15px}.sheet{margin-left:32px;margin-right:84px;max-width:none}#bottomProgress{left:auto;right:15px}.panel{left:auto;right:76px}.topbar{padding:0 30px}.welcome{padding:55px 45px}.sheet-head{margin:0 45px}}@media(max-width:650px){.topbar{height:58px;padding:0 18px}.brand{font-size:19px}.topnav{gap:17px;font-size:12px}#headerBook{display:none!important}.sheet{margin:0 0 65px;border:0;min-height:calc(100vh - 58px)}.sheet-head{height:50px;margin:0 24px}.welcome{padding:36px 24px}.welcome h1{font-size:24px}.welcome p{font-size:14px}.dropzone{padding:30px 12px}.book-head{padding:30px 24px 0}article{padding:16px 24px 50px;font-size:18px}#rail{left:0;right:0;top:auto;bottom:0;height:60px;flex-direction:row;justify-content:space-around;align-items:center;gap:0;background:var(--page);border-top:1px solid var(--line);z-index:20}.rail-button{width:40px;height:40px;border:0;background:none}.rail-button:after{display:none}#bottomProgress{display:none}.panel{top:auto;bottom:72px;right:12px;left:12px;width:auto;max-height:70vh}#shelf{gap:25px 12px}.cover{width:95px;height:135px;font-size:17px}.format-hint{font-size:10px!important}.library-footer{gap:15px;font-size:11px}}
+.topbar{position:sticky;top:0;z-index:16;background:var(--bg);height:56px;max-width:none;padding:0 40px}.sheet{min-height:calc(100vh - 56px)}#rail{top:auto;bottom:90px}.panel#directoryPanel{top:0;bottom:0;right:0;left:auto;width:min(420px,90vw);max-height:100vh;border-radius:0;padding:32px;z-index:40}#backdrop{position:fixed;inset:0;background:#0007;z-index:35}#backdrop[hidden]{display:none}@media(max-width:650px){.topbar{padding:0 18px}#rail{bottom:0}.panel#directoryPanel{width:88vw}.sheet{min-height:calc(100vh - 56px)}} 
+:root{--bg:#f7f8f2;--page:#ffffffd9;--text:#293d36;--muted:#87928b;--line:#e5e9df;--blue:#47775e;--hover:#e9f0e8}body.dark{--bg:#17251f;--page:#22342b;--text:#e2e9df;--muted:#a1b3a7;--line:#3b4a3f;--blue:#8db89c;--hover:#304739}body.paper{--blue:#8a7655}.brand svg{color:var(--blue)}.topnav .import{color:var(--blue)}.sheet{border-radius:28px 28px 0 0;box-shadow:0 12px 40px #29473206}.dropzone{border-radius:26px;border-color:#d6e1d0;background:var(--bg)}.welcome h1{font-family:'SimSun','Songti SC',serif;font-size:34px;letter-spacing:2px}.round-add{width:54px;height:54px;padding:0;border-radius:50%;font-size:32px;line-height:54px;background:var(--blue)}.primary:hover{background:var(--blue);filter:brightness(.95)}.top-add{width:38px;height:38px;border-radius:50%;background:var(--hover);font-size:25px!important;padding:0!important}.rail-button{background:var(--page);border-radius:50%;color:var(--muted)}.panel,dialog{border-radius:24px}.dragging:after{background:#f0f5edf2;color:var(--blue);border-color:var(--blue)}::selection{background:#cddfc6}.text-chunk{content-visibility:auto;contain-intrinsic-size:auto 18000px;white-space:pre-wrap}.text-chunk:first-child{content-visibility:visible}@media(max-width:650px){.sheet{border-radius:22px 22px 0 0}.welcome h1{font-size:28px}}
+.topbar{max-width:1208px;margin:0 auto;height:100px;padding:0 24px;border-bottom:1px solid var(--line)}.brand{gap:13px;text-align:left;padding:0;letter-spacing:3px;font-size:25px;font-weight:700}.brandmark{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:var(--bg);font:23px 'SimSun',serif;letter-spacing:0}.brandwords small{display:block;font-size:10px;font-weight:400;letter-spacing:2px;color:var(--muted);margin-top:4px}.sheet{margin-top:28px}.chapter-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 64px;padding:26px 0 55px;border-top:1px solid var(--line)}.chapter-nav button{background:var(--hover);padding:12px 22px;border-radius:30px;color:var(--blue)}.chapter-nav button:disabled{opacity:.35;cursor:default}.chapter-nav span{font-size:12px;color:var(--muted)}article{padding-bottom:38px}@media(max-width:650px){.topbar{height:84px;padding:0 22px}.brand{font-size:21px;letter-spacing:2px}.brandmark{width:40px;height:40px;font-size:21px}.brandwords small{font-size:9px;letter-spacing:1px}.sheet{margin-top:18px}.chapter-nav{margin:0 24px;padding-bottom:30px}.chapter-nav button{padding:10px 15px}.topnav{gap:12px}}
+@font-face{font-family:ShuyuWenKai;src:url('https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Regular.ttf') format('truetype');font-display:swap}@font-face{font-family:ShuyuNoto;src:url('https://raw.githubusercontent.com/google/fonts/main/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf') format('truetype');font-display:swap;font-weight:100 900}@font-face{font-family:ShuyuMaShan;src:url('https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/MaShanZheng-Regular.ttf') format('truetype');font-display:swap}article{white-space:normal}article p{margin:0 0 .8em;text-indent:var(--indent,2em);white-space:pre-wrap;content-visibility:auto;contain-intrinsic-size:auto 80px}article h3{font:inherit;font-weight:600;text-indent:0;margin:1.3em 0 .8em}
+#shelf,#shujianGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{display:flex;gap:18px;background:var(--page);border:1px solid var(--line);border-radius:25px;padding:20px;min-width:0;box-shadow:0 12px 40px #29473206}.cover{flex:0 0 96px;width:96px;height:144px;padding:0;display:grid;place-items:center;border:0;background:#e9eee5;color:var(--text);font-size:16px;overflow:hidden;border-radius:5px}.cover img{width:100%;height:100%;object-fit:cover}.card-info{min-width:0;flex:1}.card-info h3{font-size:15px;line-height:1.6;margin:0 0 7px;overflow-wrap:anywhere}.card-info p{font-size:11px;color:var(--muted);line-height:1.8;margin:5px 0 10px}.card-info button,.card-info a{display:inline-block;margin:5px 8px 0 0;font-size:11px;color:var(--blue);text-decoration:none}.catalog-pages{display:flex;justify-content:center;gap:20px;padding:30px;font-size:12px}.settings-row{display:block!important}.settings-label{display:block;margin-bottom:10px}.panel#settingsPanel{max-height:calc(100vh - 125px);overflow-y:auto}#fontPicker,#leadingPicker{display:block!important;min-height:42px;background:var(--hover);border-color:var(--line)}@media(max-width:800px){#shelf,#shujianGrid{grid-template-columns:1fr}.card{padding:18px}.panel#settingsPanel{max-height:70vh}}
+.book-intro{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.card{min-height:190px}.leading-slider{display:flex;align-items:center;gap:14px}.leading-slider #leadingPicker{appearance:none;-webkit-appearance:none;display:block;width:100%;min-height:0;height:6px;padding:0;border:0;border-radius:8px;background:linear-gradient(to right,var(--blue) 0%,var(--blue) var(--range-fill,38%),var(--hover) var(--range-fill,38%),var(--hover) 100%);cursor:pointer;flex:1}.leading-slider #leadingPicker::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue);border:3px solid var(--page);box-shadow:0 1px 5px #0002}.leading-slider #leadingPicker::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--blue);border:3px solid var(--page)}#leadingValue{font-size:12px;color:var(--blue);white-space:nowrap;min-width:58px;text-align:right}.range-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:14px}
+
+/* Soft circular interface. These theme definitions intentionally take precedence. */
+:root{--bg:#f8f8f1;--page:#fffefa;--text:#455548;--muted:#8c9787;--line:#e8ecdf;--blue:#708c68;--hover:#edf2e5;--petal:#f4e4dc;--sun:#f4edcd;--ui-font:'ShuyuWenKai','Microsoft YaHei',sans-serif}body{font-family:var(--ui-font);font-size:15px;background:var(--bg);color:var(--text)}body.paper{--bg:#f2eadb;--page:#fff7e9;--text:#625344;--muted:#a0917d;--line:#eadeca;--blue:#a8875e;--hover:#f1e5d1;--petal:#f4dfce;--sun:#f0e3bf}body.green{--bg:#e4eddf;--page:#f3f8ed;--text:#40553f;--muted:#85967d;--line:#dce7d4;--blue:#728e64;--hover:#e4efdc;--petal:#eae7d3;--sun:#e9edce}
+.topbar{max-width:1150px;height:112px;border:0;padding:0 30px;background:var(--bg)}.brand{font-family:var(--ui-font);font-size:27px;letter-spacing:2px;font-weight:600;gap:14px}.brandmark{width:58px;height:58px;border-radius:50%;background:var(--hover);color:var(--blue);position:relative;border:1px solid var(--line);box-shadow:5px 4px 0 var(--sun)}.brandmark svg{color:inherit}.brandwords small{font-size:12px;letter-spacing:2px;margin-top:5px}.topnav{gap:14px}.topnav>button{background:var(--hover);padding:10px 22px;border-radius:40px;color:var(--blue);font-size:14px}.topnav .top-add{width:44px;height:44px;background:var(--petal);font-size:29px!important;color:var(--text);box-shadow:none}.topnav button:hover{transform:translateY(-2px)}#headerBook{font-size:14px;color:var(--muted)}.sheet{max-width:920px;border-radius:38px 38px 0 0;border:1px solid var(--line);margin-top:12px;box-shadow:0 12px 60px #576e3e05;overflow:hidden}.sheet-head{margin:0 54px;height:70px;font-size:13px}.sheet-head span:last-child{font-size:12px}.welcome{position:relative;padding:45px 54px 48px}.welcome-tag{display:inline-flex;align-items:center;gap:9px;font-size:12px;color:var(--blue);background:var(--hover);padding:7px 15px;border-radius:30px}.welcome-tag span{font-size:18px;color:#b69d72}.welcome h1{font-family:var(--ui-font);font-size:38px;line-height:1.55;letter-spacing:1px;margin:25px 0 17px;font-weight:500}.title-flower{font-size:27px;color:#c5b08f;display:inline-block;transform:rotate(15deg);margin-left:15px}.welcome>p{font-size:15px;line-height:1.9}.dropzone{border:1px dashed #d7dfc8;border-radius:34px;background:var(--bg);padding:31px 20px 28px;margin:30px 0 15px}.dropzone>svg{background:var(--sun);padding:10px;box-sizing:content-box;width:30px;height:30px;border-radius:50%;color:#a89c6f;margin-bottom:13px}.dropzone b{font-size:19px;font-weight:400}.dropzone p{font-size:13px;margin-bottom:15px}.round-add{background:var(--blue);width:52px;height:52px;line-height:52px;font-size:30px;box-shadow:0 5px 0 #435e3f10}.round-add:hover{transform:rotate(90deg);background:var(--blue)}.format-hint{font-size:11px!important;opacity:.8}.library-head{margin-top:32px;padding:28px 0 22px}.library-head h2{font-size:22px;font-weight:400}.library-head h2:before{content:'◌';color:var(--blue);margin-right:9px}#filter{border-radius:30px;padding:10px 16px;font-size:12px;background:var(--hover)}#shelf{gap:18px}.card{border-radius:28px;background:var(--page);padding:20px;gap:17px;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-3px);border-color:#cad8bd}.cover{border-radius:8px 14px 14px 8px;background:var(--hover);box-shadow:3px 4px 0 var(--hover);font-family:var(--ui-font)}.card-info h3{font-family:var(--ui-font);font-size:18px;font-weight:500}.card-info p{font-family:var(--ui-font);font-size:12px}.card-info button{border-radius:30px;padding:7px 12px;background:var(--hover);margin:7px 5px 0 0}.card-info button:last-child{background:none;padding:7px 5px;color:var(--muted)}.library-footer{font-size:12px}.library-footer button{border-radius:30px;background:var(--hover);padding:8px 15px}#metadataStatus{line-height:1.8}#metadataStatus+button{padding:7px 12px;border:1px dashed var(--line);border-radius:24px}.book-head{padding:38px 64px 4px}.book-head h2{font-family:var(--ui-font);font-size:28px;font-weight:500}.book-head p{font-family:var(--ui-font);font-size:13px}article{color:var(--text)}.chapter-nav button{font-family:var(--ui-font);border:1px solid var(--line);border-radius:40px;padding:13px 25px;font-size:15px}.rail-button{width:48px;height:48px;background:var(--page);border:1px solid var(--line);color:var(--blue);box-shadow:0 5px 15px #56683a06;transition:transform .2s,background .2s}.rail-button:hover{transform:translateY(-3px);background:var(--hover)}.rail-button svg{stroke-width:1.6;width:21px;height:21px}.rail-button:after{border-radius:24px;font-family:var(--ui-font);background:var(--text)}#rail{gap:15px;left:calc(50% + 485px);bottom:90px}#bottomProgress{left:calc(50% + 485px);width:48px}.panel{font-family:var(--ui-font);border-radius:30px;padding:26px;background:var(--page);border:1px solid var(--line);box-shadow:0 15px 50px #293c2912}.panel-head{font-size:22px;margin-bottom:24px}.panel-head button{border-radius:50%;background:var(--hover);width:32px;height:32px;font-size:22px;display:grid;place-items:center}.settings-row{padding:16px 0;margin:0;border-top:1px dashed var(--line)}.settings-label{font-size:13px;color:var(--muted);margin-bottom:13px}.segmented{border-radius:30px;padding:5px;background:var(--hover);gap:5px}.segmented button{border-radius:30px;font-size:16px}.segmented button:hover{background:var(--page)}#fontPicker{border-radius:25px;background:var(--hover);padding:12px 16px;font-size:14px;border:0}input[type=number]{border-radius:30px;background:var(--hover);border:0}.swatches{gap:16px}.swatches button{width:42px;height:42px;border:3px solid var(--page);outline:1px solid var(--line);box-shadow:0 3px 8px #00000008;transition:transform .2s}.swatches button:hover{transform:scale(1.12)}.swatches button:nth-child(1){background:#fffefa}.swatches button:nth-child(2){background:#f2e5cd}.swatches button:nth-child(3){background:#d4e5cb}.swatches button:nth-child(4){background:#000}.setting-action{border-radius:30px;border:0;background:var(--hover);padding:10px 17px;margin-top:10px;font-size:14px}.leading-slider #leadingPicker{height:7px}.leading-slider #leadingPicker::-webkit-slider-thumb{width:21px;height:21px;box-shadow:0 1px 8px #0002}.leading-slider output{font-size:13px}#searchPanel input{border-radius:26px;background:var(--hover);border:0}.toast{font-family:var(--ui-font)}#chapters button{border-radius:18px;border:0;padding:13px 16px;margin:4px 0;font-size:14px}#chapters button:hover{background:var(--hover)}.dragging:after{border-radius:40px;background:#f4f8f0f5;color:#708c68;border-color:#9aae8f}.reading .welcome-tag{display:none}
+/* Pure black night theme: no green surfaces or green text. */
+body.dark{--bg:#000;--page:#000;--text:#fff;--muted:#b7b7b7;--line:#272727;--blue:#fff;--hover:#171717;--petal:#1b1b1b;--sun:#181818;background:#000;color:#fff}body.dark .topbar,body.dark .sheet,body.dark article,body.dark .panel,body.dark .card{background:#000;color:#fff}body.dark .brandmark{background:#151515;color:#fff;border-color:#333;box-shadow:5px 4px 0 #202020}body.dark .topnav button,body.dark .topnav .import{background:#191919;color:#fff}body.dark .welcome-tag,body.dark .dropzone{background:#101010;color:#fff;border-color:#333}body.dark .title-flower,body.dark .welcome-tag span{color:#ccc}body.dark .dropzone>svg{background:#202020;color:#fff}body.dark .round-add{background:#fff;color:#000;box-shadow:none}body.dark .card:hover{border-color:#555}body.dark .rail-button{background:#101010;color:#fff;border-color:#333;box-shadow:none}body.dark .rail-button:hover{background:#232323}body.dark .rail-button:after{background:#fff;color:#000}body.dark .chapter-nav button{background:#171717;color:#fff}body.dark .setting-action,body.dark #fontPicker,body.dark #filter,body.dark .segmented,body.dark input{background:#171717;color:#fff}body.dark .settings-label,body.dark .book-head p,body.dark .card-info p{color:#b7b7b7}body.dark .swatches button{border-color:#000;outline-color:#555}body.dark .dragging:after{background:#000f;color:#fff;border-color:#777}body.dark ::selection{background:#555;color:#fff}body.dark #progressbar{background:#fff}
+@media(min-width:1600px){.topbar{max-width:1150px}}@media(max-width:1150px){#rail{left:auto;right:16px}#bottomProgress{left:auto;right:16px}.sheet{margin-left:32px;margin-right:86px;max-width:none}}@media(max-width:650px){.topbar{height:95px;padding:0 22px}.brand{font-size:24px;gap:10px}.brandmark{width:49px;height:49px}.brandwords small{font-size:10px;letter-spacing:1px}.topnav>button{font-size:12px;padding:8px 13px}.topnav{gap:8px}.topnav .top-add{width:37px;height:37px}.sheet{margin:8px 10px 78px;border-radius:30px;border-bottom:1px solid var(--line)}.sheet-head{margin:0 24px;height:58px;font-size:12px}.sheet-head span:last-child{font-size:10px}.welcome{padding:30px 24px}.welcome h1{font-size:31px}.welcome-tag{font-size:11px}.welcome>p{font-size:14px}.dropzone{border-radius:28px;padding:26px 15px}.dropzone b{font-size:18px}.book-head{padding:28px 24px 4px}.book-head h2{font-size:25px}article{padding:16px 24px 30px}#rail{left:16px;right:16px;bottom:12px;height:58px;border-radius:35px;border:1px solid var(--line);background:var(--page);padding:0 10px;gap:0;box-shadow:0 4px 25px #00000008}.rail-button{border:0;background:none;box-shadow:none;width:42px;height:42px}body.dark #rail{background:#000;border-color:#333}body.dark .rail-button{background:none}.panel{border-radius:30px;bottom:84px;right:14px;left:14px}.panel#settingsPanel{max-height:70vh}.chapter-nav{margin:0 24px}.chapter-nav button{font-size:13px;padding:10px 17px}.card{border-radius:24px}.library-head h2{font-size:21px}.library-footer{gap:8px;font-size:10px}.library-footer button{font-size:11px;padding:6px 10px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+#shelfPage[hidden]{display:none!important}.shelf-page-inner{padding:35px 54px 48px}.shelf-page-heading{text-align:center;padding:6px 0 20px}.shelf-page-heading>span{display:grid;place-items:center;margin:0 auto 16px;width:55px;height:55px;border-radius:50%;background:var(--sun);color:var(--blue);font-size:29px}.shelf-page-heading h1{font:34px/1.5 var(--ui-font);margin:0 0 10px;letter-spacing:2px;font-weight:500}.shelf-page-heading p{color:var(--muted);font-size:14px}.shelf-page-inner .library-head{margin-top:12px}.home-library-link{text-align:center;border-top:1px dashed var(--line);margin-top:30px;padding-top:28px;color:var(--muted)}.home-little-flower{color:var(--blue);font-size:23px}.home-library-link p{font-size:13px}.home-library-link button{background:var(--hover);color:var(--blue);padding:12px 24px;border-radius:30px}.home-library-link button span{margin-left:12px}.topnav .top-add{width:auto;height:48px!important;display:flex;align-items:center;gap:6px;padding:0 16px 0 8px!important;border-radius:30px;background:var(--petal);color:#9c7d65;border:1px solid #ead9cd;box-shadow:0 3px 0 #cfb9a31a}.top-add svg{width:36px;height:36px}.import-label{font-size:14px;white-space:nowrap;font-family:var(--ui-font)}.round-add{width:70px;height:70px;display:inline-grid;place-items:center;background:var(--petal);color:#9c7d65;border:1px solid #e4d2c3;--bag-fill:#fff9ee;box-shadow:0 5px 0 #dac8b326}.round-add svg{width:51px;height:51px}.round-add:hover{transform:rotate(-7deg) translateY(-2px);background:var(--petal)}body.dark .top-add,body.dark .round-add{--bag-fill:#151515;background:#191919;color:#fff;border-color:#444;box-shadow:none}.topnav .top-add:hover{transform:rotate(-3deg)}@media(max-width:650px){.shelf-page-inner{padding:26px 24px 35px}.shelf-page-heading h1{font-size:29px}.topnav .top-add{width:45px;height:45px!important;padding:0!important;justify-content:center}.top-add svg{width:34px;height:34px}.import-label{display:none}.round-add{width:65px;height:65px}.round-add svg{width:47px;height:47px}.shelf-page-inner .library-head{gap:10px}.shelf-page-inner #filter{width:140px}}
+
+body.pink{--bg:#fff0f4;--page:#fff8fa;--text:#72535e;--muted:#aa8794;--line:#f1dce5;--blue:#c2879f;--hover:#f9e3ec;--petal:#f7d5e2;--sun:#f9e0e8}body.lavender{--bg:#f3effb;--page:#fcf9ff;--text:#625575;--muted:#9c8dac;--line:#e8dff2;--blue:#a38abd;--hover:#eee5f6;--petal:#e9dcf4;--sun:#f0e5f8}body.peach{--bg:#fff2e9;--page:#fffaf3;--text:#785e4f;--muted:#b29480;--line:#f0dfce;--blue:#c79a79;--hover:#faeada;--petal:#f8ddc9;--sun:#fae8cf}body.sky{--bg:#edf5fa;--page:#f8fcff;--text:#536a77;--muted:#8aa1b0;--line:#dceaf2;--blue:#89adbd;--hover:#e0eff5;--petal:#dceaf4;--sun:#e7f1f6}.swatches{display:grid;grid-template-columns:repeat(4,42px);gap:15px 20px}.swatches button:nth-child(4){background:#f6dce7}.swatches button:nth-child(5){background:#e6dbf3}.swatches button:nth-child(6){background:#f9e0cc}.swatches button:nth-child(7){background:#dcecf5}.swatches button:nth-child(8){background:#000}.swatches button[aria-pressed=true]{outline:2px solid var(--blue);outline-offset:3px}.leading-slider{gap:10px}.leading-slider input[type=range]{appearance:none;-webkit-appearance:none;width:100%;min-height:0!important;height:7px!important;padding:0!important;border:0;border-radius:10px;background:linear-gradient(to right,var(--blue) 0%,var(--blue) var(--range-fill,25%),var(--hover) var(--range-fill,25%),var(--hover) 100%);flex:1;min-width:0;cursor:pointer}.leading-slider input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:21px;height:21px;border-radius:50%;background:var(--blue);border:3px solid var(--page);box-shadow:0 1px 8px #0002}.leading-slider input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--blue);border:3px solid var(--page)}.leading-slider .range-number{width:77px!important;min-width:77px;flex:0 0 77px;padding:9px 8px;border:1px solid var(--line);border-radius:22px;font-size:13px;text-align:center;background:var(--hover);color:var(--text)}.range-unit{font-size:12px;color:var(--muted);white-space:nowrap}.range-number:focus{outline:2px solid var(--blue);outline-offset:2px}body.pink .topnav .top-add,body.pink .round-add{color:#b67591;--bag-fill:#fff9fb;border-color:#eed2df}body.lavender .topnav .top-add,body.lavender .round-add{color:#967bad;--bag-fill:#fcf8ff;border-color:#e3d4ee}body.sky .topnav .top-add,body.sky .round-add{color:#7d9eaf;--bag-fill:#f9fcff;border-color:#d3e4ed}.swatches button{position:relative}.swatches button:hover:after{content:attr(title);position:absolute;top:46px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;color:var(--muted);z-index:2}
+.swatches{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 10px;padding:3px 0 6px}.swatches button{width:100%;height:72px!important;border:0!important;outline:none!important;box-shadow:none!important;border-radius:16px!important;background:transparent!important;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0;gap:8px;transform:none!important}.swatches button:before{content:'';display:block;flex:0 0 38px;width:38px;height:38px;border-radius:50%;border:3px solid var(--page);outline:1px solid var(--line);box-shadow:0 2px 5px #00000008}.swatches button:after,.swatches button:hover:after{content:attr(aria-label);position:static;display:block;transform:none;white-space:nowrap;font-size:11px;line-height:18px;color:var(--muted);z-index:auto}.swatches button:nth-child(1):before{background:#fffefa}.swatches button:nth-child(2):before{background:#f2e5cd}.swatches button:nth-child(3):before{background:#d4e5cb}.swatches button:nth-child(4):before{background:#f6dce7}.swatches button:nth-child(5):before{background:#e6dbf3}.swatches button:nth-child(6):before{background:#f9e0cc}.swatches button:nth-child(7):before{background:#dcecf5}.swatches button:nth-child(8):before{background:#000}.swatches button[aria-pressed=true]:before{outline:2px solid var(--blue);outline-offset:2px}.swatches button[aria-pressed=true]:after{color:var(--blue)}.swatches button:hover:before{outline:2px solid var(--blue)}
+.character-avatar{overflow:hidden;background:none!important;box-shadow:3px 4px 0 var(--sun);padding:0;border:2px solid var(--page)}.character-avatar svg{width:100%;height:100%;display:block}.shelf-page-inner .library-head{border:0;background:var(--hover);border-radius:26px;padding:15px 18px;gap:15px;margin:15px 0 22px;flex-wrap:wrap}.shelf-tools-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.shelf-tools-title h2{font:18px var(--ui-font);margin:0}.shelf-tools-title h2:before{display:none}.shelf-dot{width:9px;height:9px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px var(--page);margin:0 4px}.book-count{font-size:11px;color:var(--blue);background:var(--page);padding:4px 11px;border-radius:24px;white-space:nowrap}.shelf-page-inner #filter{background:var(--page);border:1px solid var(--line);font-size:12px;width:166px}.shelf-page-inner #filter::placeholder{color:var(--muted)}@media(max-width:650px){.shelf-page-inner .library-head{padding:14px;border-radius:24px}.shelf-page-inner #filter{width:100%}.shelf-tools-title h2{font-size:17px}}
+</style></head><body><div id="backdrop" hidden onclick="closePanels()"></div><div id="progressbar"></div><header class="topbar"><button class="brand" onclick="home()" aria-label="返回首页"><span class="brandmark character-avatar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="大雄头像"><circle cx="32" cy="32" r="31" fill="#f8edbd"/><path d="M12 64c1-12 9-18 20-18s19 6 20 18" fill="#f0c64a"/><path d="m24 49 8 7 8-7" fill="white"/><ellipse cx="12" cy="31" rx="4" ry="6" fill="#ffdbc1"/><ellipse cx="52" cy="31" rx="4" ry="6" fill="#ffdbc1"/><path d="M13 24c0-14 38-15 38 0v11c0 12-8 18-19 18S13 47 13 35z" fill="#ffdfc7" stroke="#654e48" stroke-width="1.3"/><path d="M12 27C8 9 21 4 34 6c15-2 21 7 18 21l-6-10-7 2-6-3-7 3-7-2z" fill="#37312f"/><g fill="white" stroke="#4d4543" stroke-width="1.7"><ellipse cx="23" cy="29" rx="9" ry="10"/><ellipse cx="41" cy="29" rx="9" ry="10"/><path d="M14 27h-3m21 1h1m17-1h3"/></g><ellipse cx="25" cy="30" rx="2" ry="3.6" fill="#302a29"/><ellipse cx="39" cy="30" rx="2" ry="3.6" fill="#302a29"/><path d="M31 34q-3 4 2 4m-8 5q7 7 14-1" fill="none" stroke="#74534c" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="18" cy="40" rx="4" ry="2" fill="#f5b3a3"/><ellipse cx="46" cy="40" rx="4" ry="2" fill="#f5b3a3"/></svg></span><span class="brandwords">书屿阅读<small>把日子，读得慢一点</small></span></button><span id="headerBook"></span><nav class="topnav"><button class="import top-add" aria-label="导入书籍" title="给书架添一本小故事" onclick="$('file').click()"><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M16 13v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M11 15a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3l2 19a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="var(--bag-fill,#fff8ed)" stroke="currentColor" stroke-width="1.7"/><path d="M16 19c2-1 4 0 6 1 2-1 4-2 6-1v10c-2-1-4 0-6 1-2-1-4-2-6-1zM22 20v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="15" cy="32" r="1.3" fill="currentColor"/><circle cx="29" cy="32" r="1.3" fill="currentColor"/><path d="m35 5 1 3 3 1-3 1-1 3-1-3-3-1 3-1z" fill="currentColor"/></svg><span class="import-label">添本书</span></button></nav></header><input type="file" id="file" multiple hidden accept=".txt,.md,.html,.htm,.json,.epub,.docx,.pdf,.mobi,.azw,.azw3,.rtf,.fb2"><main class="sheet"><section id="library"><div class="sheet-head"><span>我的阅读空间</span><span>本地书籍 · 私人书架</span></div><div class="welcome"><div class="welcome-tag"><span>✿</span> 一小片安静的阅读时光</div><h1>在书里，<br>遇见柔软的日常<span class="title-flower">✿</span></h1><p>把小说拖到这里，随时开始阅读。<br>读到哪里，下次就从哪里继续。</p><div class="dropzone" onclick="$('file').click()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();$('file').click()}"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 4h6l2 2h8v14H4zM12 10v7m-3-4 3-3 3 3"/></svg><b>把喜欢的故事放进来</b><p>拖入小说，或轻点下方的小圆圈</p><button class="primary round-add" aria-label="添加小说" onclick="event.stopPropagation();$('file').click()"><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M16 13v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M11 15a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3l2 19a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="var(--bag-fill,#fff8ed)" stroke="currentColor" stroke-width="1.7"/><path d="M16 19c2-1 4 0 6 1 2-1 4-2 6-1v10c-2-1-4 0-6 1-2-1-4-2-6-1zM22 20v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="15" cy="32" r="1.3" fill="currentColor"/><circle cx="29" cy="32" r="1.3" fill="currentColor"/><path d="m35 5 1 3 3 1-3 1-1 3-1-3-3-1 3-1z" fill="currentColor"/></svg></button></div><p class="format-hint">TXT · EPUB · DOCX · HTML · PDF · 浏览器直接阅读<br>无需启动 CMD · 文件保存在当前浏览器 · MOBI/AZW 请先转为 EPUB</p><div id="status" role="status"></div><div class="home-library-link"><span class="home-little-flower">✿</span><p>喜欢的故事，都有自己的小窝。</p><button onclick="showShelf()">去我的书架坐坐 <span>↗</span></button></div></div></section><section id="shelfPage" hidden><div class="sheet-head"><span>我的私人书架</span><button onclick="home()">← 回首页</button></div><div class="shelf-page-inner"><div class="shelf-page-heading"><span>✿</span><h1>故事的小窝</h1><p>每一本喜欢的书，都好好放在这里。</p></div><div class="library-head"><div class="shelf-tools-title"><span class="shelf-dot"></span><h2>藏好的故事</h2></div><input id="filter" placeholder="搜索书架" aria-label="搜索书架" oninput="draw()"></div><div style="display:flex;align-items:center;gap:12px;font-size:11px;color:var(--muted);margin-bottom:18px"><span id="metadataStatus" role="status">正在检查书间数据连接…</span><button onclick="matchBookCovers()" style="color:var(--blue)">重新匹配封面与简介</button></div><div id="shelf"></div><div class="library-footer"><span>书籍与阅读记录保存在当前浏览器</span><button onclick="backup()">备份书架 ↗</button></div></div></section><section id="reader"><div class="sheet-head"><span id="chapterLabel">正文</span><span id="readingInfo"></span></div><div class="book-head"><h2 id="title"></h2><p id="chapterMeta"></p></div><article id="text"></article><nav class="chapter-nav" aria-label="章节翻页"><button id="previousChapter" onclick="turnChapter(-1)">← 上一章</button><span id="chapterNumber"></span><button id="nextChapter" onclick="turnChapter(1)">下一章 →</button></nav></section></main><nav id="rail" aria-label="阅读工具"><button class="rail-button reader-only" data-label="目录" aria-label="目录" onclick="togglePanel('directoryPanel')" data-icon="list"></button><button class="rail-button reader-only" data-label="搜索" aria-label="搜索正文" onclick="togglePanel('searchPanel')" data-icon="search"></button><button class="rail-button" data-label="阅读设置" aria-label="阅读设置" onclick="togglePanel('settingsPanel')" data-icon="settings"></button><button class="rail-button reader-only" data-label="回到顶部" aria-label="回到顶部" onclick="goTop()" data-icon="up"></button></nav><div id="bottomProgress" class="reader-only">0%</div><section class="panel" id="directoryPanel" hidden><div class="panel-head">目录<button onclick="closePanels()" aria-label="关闭目录">×</button></div><select id="toc" aria-label="章节"></select><div id="chapters"></div></section><section class="panel" id="searchPanel" hidden><div class="panel-head">搜索正文<button onclick="closePanels()" aria-label="关闭搜索">×</button></div><input id="find" placeholder="输入关键词，按回车搜索" aria-label="搜索正文" onkeydown="if(event.key==='Enter')searchText(this.value)"><div id="searchResults"></div></section><section class="panel" id="settingsPanel" hidden><div class="panel-head"><span>✿ 阅读小偏好</span><button onclick="closePanels()" aria-label="关闭设置">×</button></div><div class="settings-row"><div class="settings-label">字号 <span id="fontValue">20</span></div><div class="segmented"><button onclick="resize(-1)">A−</button><button onclick="setFont(20)">默认</button><button onclick="resize(1)">A＋</button></div></div><div class="settings-row"><div class="settings-label">今天想用哪种底色</div><div class="swatches"><button onclick="setTheme('')" aria-label="白色" title="奶白日光"></button><button onclick="setTheme('paper')" aria-label="纸页" title="暖暖纸页"></button><button onclick="setTheme('green')" aria-label="护眼" title="薄荷护眼"></button><button onclick="setTheme('pink')" aria-label="浅粉" title="草莓奶昔"></button><button onclick="setTheme('lavender')" aria-label="淡紫" title="薰衣草"></button><button onclick="setTheme('peach')" aria-label="蜜桃" title="蜜桃乌龙"></button><button onclick="setTheme('sky')" aria-label="雾蓝" title="晴空"></button><button onclick="setTheme('dark')" aria-label="夜间" title="纯黑夜间"></button></div><select id="theme" hidden><option value="">白色</option><option value="paper">纸页</option><option value="green">护眼</option><option value="pink">浅粉</option><option value="lavender">淡紫</option><option value="peach">蜜桃</option><option value="sky">雾蓝</option><option value="dark">夜间</option></select></div><div class="settings-row"><div class="settings-label">阅读字体（可下拉选择）</div><select id="fontPicker" aria-label="阅读字体" onchange="setTypeface(this.value)" style="width:100%"><option value="sans">微软雅黑</option><option value="serif">宋体</option><option value="kai">楷体</option><option value="fang">仿宋</option><option value="wenkai">霞鹜文楷 TC · 本地字体</option><option value="noto">Noto Serif SC · 本地字体</option><option value="mashan">马善政楷书 · 本地字体</option></select></div><div class="settings-row"><div class="settings-label">行间距</div><div class="leading-slider"><input id="leadingPicker" aria-label="行间距" type="range" min="1" max="3.5" step="0.01" value="1.95" oninput="setLeading(this.value)"><input id="leadingNumber" class="range-number" aria-label="行间距数值" type="number" min="1" max="3.5" step="0.01" value="1.95" oninput="syncNumber('leading',this.value)" onchange="setLeading(this.value)"><span class="range-unit">倍</span></div><div class="range-labels"><span>紧凑 1.00</span><span>宽松 3.50</span></div></div><div class="settings-row"><label class="settings-label" for="indentChars">首行缩进（字符）</label><div class="leading-slider"><input id="indentSlider" aria-label="首行缩进滑条" type="range" min="0" max="8" step="0.1" value="2" oninput="setIndent(this.value)"><input id="indentChars" class="range-number" aria-label="首行缩进字符数" type="number" min="0" max="8" step="0.1" value="2" oninput="syncNumber('indent',this.value)" onchange="setIndent(this.value)"><span class="range-unit">字</span></div><div class="range-labels"><span>不缩进 0</span><span>8 字</span></div></div><button class="setting-action" onclick="speak()">朗读 / 停止朗读</button><button class="setting-action" onclick="exportTxt()">导出本书 TXT</button></section><div id="toast" class="toast" role="status"></div><script src="./vendor/jszip.min.js"></script><script>
+/* ==========================================================================
+   书屿阅读 — 阅读内核
+   针对超大 TXT（几十 MB / 上百万行）做了三件事：
+   1. 导入时清洗 HTML 标签（<br/> 变换行，其余标签去掉，实体解码）；
+   2. 章节识别失败或单章过大时，按行切成若干"分段"，一次只渲染一小块；
+   3. 正文与书籍信息分表存储，翻页保存只写进度，不再每次重写十几 MB。
+   ========================================================================== */
+
+var $ = function (id) { return document.getElementById(id); };
+
+var PAGE_SIZE = 30000;      // 单段最多渲染的字符数
+var MAX_PART_LINES = 800;   // 单段最多渲染的行数
+var MAX_LINE_CHARS = 1200;  // 单行超长时强制折行，避免一个 <p> 里塞几十万字
+var DB_NAME = 'mohai-reader';
+var DB_VERSION = 2;
+var db = null;
+var books = [];
+var current = null;
+var chapterList = [];
+var chapterIndex = 0;
+var dbLoaded = false;
+var font = Number(localStorage.mohaiFont) || 20;
+var saveTimer = null;
+
+/* ------------------------------------------------------------------ 存储 */
+
+function upgradeDatabase(req, event) {
+  var d = req.result;
+  var tx = req.transaction;
+  if (!d.objectStoreNames.contains('books')) d.createObjectStore('books', { keyPath: 'id' });
+  if (!d.objectStoreNames.contains('contents')) d.createObjectStore('contents', { keyPath: 'id' });
+  if (event.oldVersion === 1) {
+    try { $('status').textContent = '正在整理书架数据（首次升级，请稍候）…'; } catch (e) { }
+    /* 旧版把整本正文塞在 books 记录里，升级时搬到 contents，避免每次翻页重写十几 MB */
+    var store = tx.objectStore('books');
+    var contents = tx.objectStore('contents');
+    var cursor = store.openCursor();
+    cursor.onsuccess = function () {
+      var c = cursor.result;
+      if (!c) return;
+      var value = c.value;
+      if (value && typeof value.content === 'string') {
+        contents.put({ id: value.id, text: value.content });
+        delete value.content;
+        c.update(value);
+      }
+      c.continue();
+    };
+  }
+}
+
+var openDB = new Promise(function (resolve, reject) {
+  var req = indexedDB.open(DB_NAME, DB_VERSION);
+  req.onupgradeneeded = function (e) { upgradeDatabase(req, e); };
+  req.onsuccess = function () { resolve(req.result); };
+  req.onerror = function () { reject(req.error || new Error('书架无法打开')); };
+  req.onblocked = function () { reject(new Error('书架被其它标签页占用，请关闭其它阅读页后刷新')); };
+});
+
+var ready = openDB.then(function (d) {
+  db = d;
+  return new Promise(function (resolve, reject) {
+    var req = db.transaction('books').objectStore('books').getAll();
+    req.onsuccess = function () {
+      books = req.result || [];
+      dbLoaded = true;
+      document.dispatchEvent(new Event('shuyu-books-ready'));
+      draw();
+      var last = books.filter(function (b) { return b.id === localStorage.shuyuLast; })[0];
+      if (location.hash === '#shelf') showShelf();
+      else if (last) read(last);
+      else $('status').textContent = '';
+      resolve();
+    };
+    req.onerror = function () { reject(req.error); };
+  });
+}).catch(function (e) {
+  toast('书架存储不可用：' + (e && e.message ? e.message : e));
+  throw e;
+});
+
+function idbPut(store, value) {
+  return new Promise(function (resolve, reject) {
+    var tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).put(value);
+    tx.oncomplete = function () { resolve(); };
+    tx.onerror = function () { reject(tx.error); };
+  });
+}
+
+function idbGet(store, key) {
+  return new Promise(function (resolve, reject) {
+    var tx = db.transaction(store);
+    var req = tx.objectStore(store).get(key);
+    tx.oncomplete = function () { resolve(req.result); };
+    tx.onerror = function () { reject(tx.error); };
+  });
+}
+
+function idbDelete(store, key) {
+  return new Promise(function (resolve, reject) {
+    var tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).delete(key);
+    tx.oncomplete = function () { resolve(); };
+    tx.onerror = function () { reject(tx.error); };
+  });
+}
+
+/* 只保存书籍信息与进度，正文永远不进 books 表 */
+function save(b) {
+  if (!db) return Promise.reject(new Error('书架还没准备好'));
+  var meta = {};
+  for (var k in b) if (k !== 'content') meta[k] = b[k];
+  return idbPut('books', meta);
+}
+
+function saveContent(id, text) {
+  if (!db) return Promise.reject(new Error('书架还没准备好'));
+  return idbPut('contents', { id: id, text: text });
+}
+
+function loadContent(id) {
+  if (!db) return Promise.resolve(undefined);
+  return idbGet('contents', id).then(function (rec) { return rec ? rec.text : undefined; });
+}
+
+function scheduleSave(delay) {
+  if (!current) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function () {
+    var b = current;
+    if (b) save(b).catch(error);
+  }, delay || 900);
+}
+
+/* ------------------------------------------------------------------ 文本清洗 */
+
+/* 把 TXT 里混进来的 HTML 标签处理掉：<br> 当换行，块级标签当换行，
+   行内标签直接删除，常见实体解码，顺便统一换行符与空行。 */
+function sanitizeText(input) {
+  if (typeof input !== 'string' || !input) return '';
+  var t = input;
+  if (t.charCodeAt(0) === 0xfeff) t = t.slice(1);
+  var dirty = t.indexOf('<') >= 0 || t.indexOf('&') >= 0 || t.indexOf('\r') >= 0 || t.indexOf('\u200b') >= 0;
+  if (!dirty) return t;
+
+  t = t.replace(/\r\n?/g, '\n');
+  t = t.replace(/<script[\s\S]*?<\/script>/gi, '');
+  t = t.replace(/<style[\s\S]*?<\/style>/gi, '');
+  t = t.replace(/<!--[\s\S]*?-->/g, '');
+  /* 行尾的 <br/> 是多余的（本来就要换行），先删掉，免得每段之间多一个空行 */
+  t = t.replace(/[ \t\u3000]*<br\s*\/?>[ \t]*(?=\n|$)/gi, '');
+  t = t.replace(/<br\s*\/?>/gi, '\n');
+  /* 块级标签 -> 换行 */
+  t = t.replace(/<\/?(?:p|div|h[1-6]|hr|li|ul|ol|dl|dt|dd|tr|table|tbody|thead|tfoot|section|article|blockquote|pre|center|figure|figcaption|header|footer|nav|main|aside)\b[^>]{0,200}>/gi, '\n');
+  /* 行内标签 -> 直接去掉 */
+  t = t.replace(/<\/?(?:span|b|i|u|em|strong|font|a|img|sup|sub|small|big|s|strike|del|ins|code|kbd|mark|label|button|input|td|th|caption|ruby|rt|rp)\b[^>]{0,200}>/gi, '');
+  /* 剩下的畸形标签（如 <SPAN 没有右尖括号以外的情况）再兜一次底 */
+  t = t.replace(/<\/?[a-z][a-z0-9]{0,11}(?:\s[^>]{0,200})?\/?>/gi, '');
+
+  t = t.replace(/&nbsp;/gi, ' ')
+       .replace(/&lt;/gi, '<')
+       .replace(/&gt;/gi, '>')
+       .replace(/&quot;/gi, '"')
+       .replace(/&(?:#39|apos);/gi, "'")
+       .replace(/&amp;/gi, '&');
+  t = t.replace(/&#(\d{1,7});/g, function (m, d) {
+    var c = parseInt(d, 10);
+    return c > 0 && c < 0x110000 ? String.fromCodePoint(c) : m;
+  });
+  t = t.replace(/&#x([0-9a-f]{1,6});/gi, function (m, h) {
+    var c = parseInt(h, 16);
+    return c > 0 && c < 0x110000 ? String.fromCodePoint(c) : m;
+  });
+
+  t = t.replace(/[\u200b-\u200f\ufeff]/g, '');
+  t = t.replace(/[ \t\u3000]+(?=\n)/g, '');
+  t = t.replace(/\n{3,}/g, '\n\n');
+  return t;
+}
+
+/* ------------------------------------------------------------------ 章节 */
+
+var CHAPTER_RE = /^[\u3000 \t]*(第[零〇一二两三四五六七八九十百千万两\d]{1,12}[章节回卷部篇集][^\n]{0,60}|序章[^\n]{0,50}|楔子[^\n]{0,50}|尾声[^\n]{0,50}|番外[^\n]{0,50}|后记[^\n]{0,50})[\u3000 \t]*$/gm;
+
+/* 把一段正文按行切成若干块，每块不超过 PAGE_SIZE 字符 / MAX_PART_LINES 行 */
+function splitChapter(content, start, end, title, out) {
+  var pieces = [];
+  var s = start, chars = 0, lines = 0, i = start;
+  while (i < end) {
+    var j = content.indexOf('\n', i);
+    if (j < 0 || j > end) j = end;
+    chars += j - i + 1;
+    lines++;
+    if (chars >= PAGE_SIZE || lines >= MAX_PART_LINES) {
+      var cut = j > s ? j : Math.min(end, s + PAGE_SIZE);
+      pieces.push([s, cut]);
+      s = cut;
+      chars = 0;
+      lines = 0;
+    }
+    i = j >= end ? end : j + 1;
+  }
+  if (s < end) pieces.push([s, end]);
+  if (!pieces.length) pieces.push([start, end]);
+  if (pieces.length === 1) {
+    out.push({ title: title, start: pieces[0][0], end: pieces[0][1] });
+    return;
+  }
+  for (var k = 0; k < pieces.length; k++) {
+    out.push({
+      title: title + '（' + (k + 1) + '/' + pieces.length + '）',
+      start: pieces[k][0],
+      end: pieces[k][1]
+    });
+  }
+}
+
+function parseChapters(content) {
+  var list = [];
+  var m;
+  CHAPTER_RE.lastIndex = 0;
+  while ((m = CHAPTER_RE.exec(content))) list.push({ title: m[1].trim(), start: m.index });
+  if (!list.length) {
+    list.push({ title: '正文', start: 0 });
+  } else if (list[0].start > 0 && content.slice(0, list[0].start).trim()) {
+    list.unshift({ title: '前言', start: 0 });
+  } else {
+    list[0].start = 0;
+  }
+  var out = [];
+  var paginated = false;
+  for (var i = 0; i < list.length; i++) {
+    var end = i + 1 < list.length ? list[i + 1].start : content.length;
+    var before = out.length;
+    splitChapter(content, list[i].start, end, list[i].title, out);
+    if (out.length - before > 1) paginated = true;
+  }
+  out.paginated = paginated;
+  return out;
+}
+
+/* ------------------------------------------------------------------ 书架 */
+
+function el(tag, text) {
+  var e = document.createElement(tag);
+  e.textContent = text;
+  return e;
+}
+
+function coverURL(url) {
+  if (!url) return '';
+  if (url.indexOf('/covers/') === 0) return '';
+  if (url.indexOf('https://') === 0 || url.indexOf('data:image/') === 0) return url;
+  return '';
+}
+
+function draw() {
+  if ($('bookCount')) $('bookCount').textContent = '';
+  $('shelf').replaceChildren();
+  var keyword = $('filter').value;
+  for (var i = 0; i < books.length; i++) {
+    let b = books[i];
+    if (keyword && b.title.indexOf(keyword) < 0) continue;
+    let card = el('div', '');
+    card.className = 'card';
+    let cover = el('div', b.title);
+    cover.className = 'cover';
+    let url = coverURL(b.cover_url);
+    if (url) {
+      let img = el('img', '');
+      img.src = url;
+      img.alt = b.title + '封面';
+      img.loading = 'lazy';
+      img.onerror = function () { img.remove(); cover.textContent = b.title; };
+      cover.replaceChildren(img);
+    }
+    cover.onclick = function () { read(b); };
+    let info = el('div', '');
+    info.className = 'card-info';
+    info.append(
+      el('h3', b.displayTitle || b.title),
+      el('p', b.author || '本地书籍'),
+      Object.assign(el('p', b.intro || '暂无匹配简介'), { className: 'book-intro' }),
+      el('p', '已读 ' + Math.round((b.progress || 0) * 100) + '%')
+    );
+    let open = el('button', '继续阅读 ↗');
+    open.onclick = function () { read(b); };
+    let del = el('button', '移除');
+    del.onclick = function () { removeBook(b); };
+    info.append(open, del);
+    card.append(cover, info);
+    $('shelf').append(card);
+  }
+  if (!books.length) $('shelf').append(Object.assign(el('p', '拖入小说开始阅读，封面与简介会自动匹配。'), { className: 'empty' }));
+}
+
+function removeBook(b) {
+  if (!confirm('移除此书？')) return;
+  Promise.all([idbDelete('books', b.id), idbDelete('contents', b.id)]).then(function () {
+    books = books.filter(function (x) { return x.id !== b.id; });
+    if (current && current.id === b.id) home();
+    draw();
+  }).catch(error);
+}
+
+/* ------------------------------------------------------------------ 导入 */
+
+async function importFiles(files) {
+  await ready;
+  var imported = [];
+  for (var i = 0; i < files.length; i++) {
+    var f = files[i];
+    try {
+      if (f.size > 30 * 1024 * 1024) throw new Error('单本请小于 30MB');
+      if (/\.json$/i.test(f.name)) {
+        var list = JSON.parse(await f.text());
+        if (!Array.isArray(list) || list.some(function (b) { return typeof b.id !== 'string' || typeof b.title !== 'string' || typeof b.content !== 'string'; })) throw new Error('备份格式无效');
+        for (var n = 0; n < list.length; n++) {
+          var rec = list[n];
+          var text0 = sanitizeText(rec.content);
+          await saveContent(rec.id, text0);
+          rec.content = text0;
+          await save(rec);
+          rec.content = text0;
+          books = books.filter(function (x) { return x.id !== rec.id; });
+          books.push(rec);
+        }
+        continue;
+      }
+      var name = f.name;
+      if (!/\.(txt|md|html?)$/i.test(name)) {
+        $('status').textContent = '正在转换：' + name + '…';
+        var j = {text:await browserConvert(f)};
+        name = name.replace(/\.[^.]+$/, '.txt');
+        f = new File([j.text], name);
+      }
+      $('status').textContent = '正在读取：' + name + '…';
+      await new Promise(function (r) { setTimeout(r, 0); });
+      var text = sanitizeText(decodeText(await f.arrayBuffer()));
+      if (!text.trim()) throw new Error('没有识别到正文（扫描版需要先做 OCR）');
+      var b = {
+        id: crypto.randomUUID(),
+        title: name.replace(/\.[^.]+$/, ''),
+        content: text,
+        progress: 0,
+        notes: []
+      };
+      await saveContent(b.id, text);
+      await save(b);
+      books.push(b);
+      imported.push(b);
+      $('status').textContent = '已加入书架：' + b.title + '（' + text.length.toLocaleString() + ' 字）';
+    } catch (err) {
+      $('status').textContent = f.name + '：' + (err && err.message ? err.message : err);
+    }
+  }
+  draw();
+  matchBookCovers();
+  return imported;
+}
+
+$('file').onchange = async function (e) {
+  var added = await importFiles(e.target.files);
+  e.target.value = '';
+  if (added.length) read(added[added.length - 1]);
+};
+
+document.addEventListener('dragover', function (e) {
+  e.preventDefault();
+  document.body.classList.add('dragging');
+});
+
+document.addEventListener('dragleave', function (e) {
+  if (!e.relatedTarget) document.body.classList.remove('dragging');
+});
+
+document.addEventListener('drop', async function (e) {
+  e.preventDefault();
+  document.body.classList.remove('dragging');
+  var added = await importFiles(e.dataTransfer.files);
+  if (added.length) read(added[added.length - 1]);
+});
+
+/* ------------------------------------------------------------------ 阅读 */
+
+async function read(b) {
+  if (!b) return;
+  try {
+    $('status').textContent = '正在打开《' + b.title + '》…';
+    var text = typeof b.content === 'string' ? b.content : await loadContent(b.id);
+    if (typeof text !== 'string' || !text) throw new Error('没有读到正文，可能书籍数据已损坏，请重新导入');
+    var clean = sanitizeText(text);
+    if (clean !== text) {
+      text = clean;
+      saveContent(b.id, text).catch(error);
+    }
+    b.content = text;
+
+    current = b;
+    localStorage.shuyuLast = b.id;
+    for (var i = 0; i < books.length; i++) {
+      if (books[i] !== b && books[i].content && books[i].content.length > 1000000) delete books[i].content;
+    }
+
+    $('shelfPage').hidden = true;
+    location.hash = 'read';
+    document.body.classList.add('reading');
+    closePanels();
+    $('headerBook').textContent = b.title;
+    $('chapterMeta').textContent = b.content.length.toLocaleString() + ' 字 · 本地书籍';
+    $('readingInfo').textContent = '阅读进度自动保存';
+    $('library').style.display = 'none';
+    $('shelfPage').hidden = true;
+    $('reader').style.display = 'block';
+    $('title').textContent = b.title;
+    $('text').style.fontSize = font + 'px';
+
+    chapterList = parseChapters(b.content);
+    var target = Math.floor((b.progress || 0) * b.content.length);
+    chapterIndex = Math.max(0, chapterList.findLastIndex(function (c) { return c.start <= target; }));
+    if (chapterIndex >= chapterList.length) chapterIndex = chapterList.length - 1;
+    renderPage();
+    buildChapters();
+    $('status').textContent = '';
+    requestAnimationFrame(function () {
+      jump(target);
+      updateProgress();
+    });
+  } catch (e) {
+    error(e);
+    $('status').textContent = '打开失败：' + (e && e.message ? e.message : e);
+  }
+}
+
+function showShelf() {
+  home();
+  $('library').style.display = 'none';
+  $('shelfPage').hidden = false;
+  location.hash = 'shelf';
+  draw();
+  scrollTo(0, 0);
+}
+
+function home() {
+  location.hash = '';
+  $('shelfPage').hidden = true;
+  if (current) save(current).catch(error);
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  clearTimeout(saveTimer);
+  current = null;
+  chapterList = [];
+  chapterIndex = 0;
+  for (var j = 0; j < books.length; j++) {
+    if (books[j].content && books[j].content.length > 1000000) delete books[j].content;
+  }
+  delete localStorage.shuyuLast;
+  document.body.classList.remove('reading');
+  closePanels();
+  $('headerBook').textContent = '';
+  $('progressbar').style.width = '0';
+  $('reader').style.display = 'none';
+  $('library').style.display = 'block';
+  $('text').replaceChildren();
+  draw();
+  scrollTo(0, 0);
+}
+
+window.addEventListener('scroll', function () {
+  if (!current || !chapterList.length) return;
+  var c = chapterList[chapterIndex];
+  if (!c) return;
+  var total = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  var ratio = Math.max(0, Math.min(1, scrollY / total));
+  var next = Math.min(1, (c.start + (c.end - c.start) * ratio) / Math.max(1, current.content.length));
+  if (Math.abs(next - (current.progress || 0)) < 0.0005) return;
+  current.progress = next;
+  updateProgress();
+  scheduleSave();
+}, { passive: true });
+
+window.addEventListener('pagehide', function () {
+  if (current) save(current).catch(error);
+});
+
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'hidden' && current) save(current).catch(error);
+});
+
+function jump(i) {
+  if (!current || !chapterList.length) return;
+  i = Math.max(0, Math.min(i, current.content.length - 1));
+  var idx = Math.max(0, chapterList.findLastIndex(function (c) { return c.start <= i; }));
+  if (idx >= chapterList.length) idx = chapterList.length - 1;
+  if (idx !== chapterIndex) {
+    chapterIndex = idx;
+    renderPage();
+  }
+  var offset = i - chapterList[chapterIndex].start;
+  var parts = [].slice.call($('text').children);
+  var part = null;
+  for (var k = 0; k < parts.length; k++) {
+    if (Number(parts[k].dataset.end) > offset) { part = parts[k]; break; }
+  }
+  if (!part) part = parts[parts.length - 1];
+  if (!part) { goTop(); return; }
+  part.scrollIntoView({ block: 'start' });
+  requestAnimationFrame(function () {
+    window.scrollTo(0, Math.max(0, part.getBoundingClientRect().top + window.scrollY - 145));
+  });
+}
+
+$('toc').onchange = function (e) { jump(Number(e.target.value)); };
+
+function updateProgress() {
+  if (!current) return;
+  var p = Math.round((current.progress || 0) * 100);
+  $('bottomProgress').textContent = p + '%';
+  $('progressbar').style.width = p + '%';
+  var c = chapterList[chapterIndex];
+  $('chapterLabel').textContent = c ? c.title : '正文';
+}
+
+function renderPage() {
+  if (!current || !chapterList.length) return;
+  var c = chapterList[chapterIndex];
+  if (!c) return;
+  var content = current.content.slice(c.start, c.end);
+  var fragment = document.createDocumentFragment();
+  var re = /[^\n]+/g;
+  var m;
+  var count = 0;
+  while ((m = re.exec(content)) && count < 4000) {
+    var raw = m[0];
+    var value = raw.trim();
+    if (!value) continue;
+    var heading = /^(第[零〇一二两三四五六七八九十百千万\d]+[章节回卷部篇]|序章|楔子|尾声|番外)/.test(value) && value.length < 85;
+    if (heading && count === 0 && value === c.title) continue;
+    if (value.length > MAX_LINE_CHARS) {
+      for (var k = 0; k < value.length; k += MAX_LINE_CHARS) {
+        var piece = value.slice(k, k + MAX_LINE_CHARS);
+        var chunk = el('p', piece);
+        var base = m.index + Math.round(k / value.length * raw.length);
+        chunk.dataset.start = base;
+        chunk.dataset.end = base + piece.length;
+        fragment.append(chunk);
+        count++;
+      }
+      continue;
+    }
+    var part = el(heading ? 'h3' : 'p', value);
+    part.dataset.start = m.index;
+    part.dataset.end = m.index + raw.length;
+    fragment.append(part);
+    count++;
+  }
+  $('text').replaceChildren(fragment);
+  var unit = chapterList.paginated ? '段' : '章';
+  $('title').textContent = c.title;
+  $('chapterMeta').textContent = current.title + ' · ' + (chapterIndex + 1) + ' / ' + chapterList.length + ' ' + unit;
+  $('chapterLabel').textContent = c.title;
+  $('chapterNumber').textContent = (chapterIndex + 1) + ' / ' + chapterList.length;
+  $('previousChapter').disabled = chapterIndex === 0;
+  $('nextChapter').disabled = chapterIndex === chapterList.length - 1;
+}
+
+function turnChapter(delta) {
+  if (!current || !chapterList.length) return;
+  chapterIndex = Math.max(0, Math.min(chapterList.length - 1, chapterIndex + delta));
+  renderPage();
+  current.progress = chapterList[chapterIndex].start / Math.max(1, current.content.length);
+  scheduleSave(300);
+  scrollTo(0, 0);
+  updateProgress();
+}
+
+function buildChapters() {
+  var toc = $('toc');
+  var chapters = $('chapters');
+  toc.replaceChildren();
+  chapters.replaceChildren();
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < chapterList.length; i++) {
+    var c = chapterList[i];
+    toc.add(new Option(c.title, c.start));
+    var btn = el('button', c.title);
+    btn.onclick = function (start) {
+      return function () { closePanels(); jump(start); };
+    }(c.start);
+    frag.append(btn);
+  }
+  chapters.append(frag);
+}
+
+/* ------------------------------------------------------------------ 搜索 / 朗读 / 导出 */
+
+function searchText(q) {
+  $('searchResults').replaceChildren();
+  if (!current || !q.trim()) return;
+  var text = current.content;
+  var i = 0, count = 0;
+  var frag = document.createDocumentFragment();
+  while ((i = text.indexOf(q, i)) >= 0 && count < 80) {
+    var pos = i;
+    var btn = el('button', text.slice(Math.max(0, i - 20), i + q.length + 45).replace(/\n/g, ' '));
+    btn.onclick = function (p) {
+      return function () { closePanels(); jump(p); };
+    }(pos);
+    frag.append(btn);
+    i += q.length;
+    count++;
+  }
+  $('searchResults').append(frag);
+  if (!count) $('searchResults').append(el('p', '没有找到相关内容'));
+}
+
+function speak() {
+  if (!current) { toast('请先打开一本书'); return; }
+  if (!window.speechSynthesis) { toast('当前浏览器不支持朗读'); return; }
+  if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+  var from = Math.floor(current.content.length * (current.progress || 0));
+  var s = getSelection().toString() || current.content.slice(from, from + 3000);
+  var u = new SpeechSynthesisUtterance(s);
+  u.lang = 'zh-CN';
+  speechSynthesis.speak(u);
+}
+
+function download(name, text, type) {
+  var url = URL.createObjectURL(new Blob([text], { type: type }));
+  var a = el('a', '');
+  a.href = url;
+  a.download = name;
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+}
+
+async function exportTxt() {
+  if (!current) { toast('请先打开一本书'); return; }
+  var text = typeof current.content === 'string' ? current.content : await loadContent(current.id);
+  download(current.title + '.txt', text || '', 'text/plain;charset=utf-8');
+}
+
+async function backup() {
+  try {
+    await ready;
+    var out = [];
+    for (var i = 0; i < books.length; i++) {
+      var b = books[i];
+      var text = typeof b.content === 'string' ? b.content : (await loadContent(b.id)) || '';
+      var copy = {};
+      for (var k in b) copy[k] = b[k];
+      copy.content = text;
+      out.push(copy);
+    }
+    download('书屿书架备份.json', JSON.stringify(out), 'application/json');
+    toast('已备份 ' + out.length + ' 本书');
+  } catch (e) { error(e); }
+}
+
+/* ------------------------------------------------------------------ 界面小工具 */
+
+function error(e) { toast(e && e.message ? e.message : String(e)); }
+
+function toast(message) {
+  $('toast').textContent = message;
+  $('toast').classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(function () { $('toast').classList.remove('show'); }, 2600);
+}
+
+function closePanels() {
+  document.querySelectorAll('.panel').forEach(function (p) { p.hidden = true; });
+  $('backdrop').hidden = true;
+}
+
+function togglePanel(id) {
+  var was = $(id).hidden;
+  closePanels();
+  $(id).hidden = !was;
+  if (id === 'directoryPanel' && was) $('backdrop').hidden = false;
+  if (id === 'searchPanel' && was) $('find').focus();
+}
+
+function setTheme(name) {
+  document.body.classList.remove('dark', 'paper', 'green', 'pink', 'lavender', 'peach', 'sky');
+  if (['dark', 'paper', 'green', 'pink', 'lavender', 'peach', 'sky'].indexOf(name) >= 0) document.body.classList.add(name);
+  localStorage.mohaiTheme = name;
+  $('theme').value = name;
+  document.querySelectorAll('.swatches button').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.getAttribute('onclick') === "setTheme('" + name + "')"));
+  });
+}
+
+function setFont(n) {
+  font = Math.max(14, Math.min(36, n));
+  localStorage.mohaiFont = font;
+  $('fontValue').textContent = font;
+  $('text').style.fontSize = font + 'px';
+}
+
+function resize(n) { setFont(font + n); }
+
+function setTypeface(name) {
+  var families = {
+    sans: "'Microsoft YaHei',sans-serif",
+    serif: "'SimSun',serif",
+    kai: "'KaiTi',serif",
+    fang: "'FangSong',serif",
+    wenkai: "'ShuyuWenKai',serif",
+    noto: "'ShuyuNoto',serif",
+    mashan: "'ShuyuMaShan',serif"
+  };
+  if (!families[name]) name = 'sans';
+  localStorage.shuyuTypeface = name;
+  $('text').style.fontFamily = families[name];
+  $('fontPicker').value = name;
+  if (['wenkai', 'noto', 'mashan'].indexOf(name) >= 0) {
+    document.fonts.load('20px ' + families[name].split(',')[0]).catch(function () { toast('字体加载失败，请重新启动阅读服务'); });
+  }
+}
+
+function setIndent(n) {
+  n = Math.round(Math.max(0, Math.min(8, Number(n) || 0)) * 10) / 10;
+  localStorage.shuyuIndent = n;
+  document.documentElement.style.setProperty('--indent', n + 'em');
+  $('indentChars').value = n;
+  $('indentSlider').value = n;
+  $('indentSlider').style.setProperty('--range-fill', (n / 8 * 100) + '%');
+}
+
+function syncNumber(kind, value) {
+  if (value.trim() === '') return;
+  var n = Number(value);
+  var max = kind === 'leading' ? 3.5 : 8;
+  var min = kind === 'leading' ? 1 : 0;
+  if (!Number.isFinite(n) || n < min || n > max) return;
+  if (kind === 'leading') setLeading(n, true);
+  else {
+    var input = $('indentChars'), old = input.value;
+    setIndent(n);
+    input.value = old;
+  }
+}
+
+function setLeading(n, keepInput) {
+  n = Math.round(Math.min(3.5, Math.max(1, Number(n) || 1.95)) * 100) / 100;
+  localStorage.shuyuLeading = n;
+  $('text').style.lineHeight = n;
+  $('leadingPicker').value = String(n);
+  if (!keepInput) $('leadingNumber').value = n.toFixed(2);
+  $('leadingPicker').style.setProperty('--range-fill', ((n - 1) / 2.5 * 100) + '%');
+}
+
+function goTop() {
+  closePanels();
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  requestAnimationFrame(function () {
+    window.scrollTo(0, 0);
+    if (current && chapterList[chapterIndex]) {
+      current.progress = chapterList[chapterIndex].start / Math.max(1, current.content.length);
+      updateProgress();
+      scheduleSave(300);
+    }
+  });
+}
+
+function decodeText(buf) {
+  var bytes = new Uint8Array(buf);
+  if (bytes[0] === 255 && bytes[1] === 254) return new TextDecoder('utf-16le').decode(buf);
+  if (bytes[0] === 254 && bytes[1] === 255) return new TextDecoder('utf-16be').decode(buf);
+  var zeros = 0;
+  for (var i = 1; i < Math.min(bytes.length, 2000); i += 2) if (bytes[i] === 0) zeros++;
+  if (zeros > 150) return new TextDecoder('utf-16le').decode(buf);
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(buf);
+  } catch (e) {
+    return new TextDecoder('gb18030').decode(buf);
+  }
+}
+
+/* ------------------------------------------------------------------ 书间封面匹配 */
+
+function normalizedTitle(title) {
+  return String(title || '').normalize('NFKC').replace(/\.(txt|epub|mobi|azw3?|pdf|docx|html?|md)$/i, '').replace(/[《》〈〉「」『』\s]/g, '').toLowerCase();
+}
+
+var matchingCovers = false;
+
+function bookIdentity(book) {
+  var raw = String(book.title || '').replace(/\.(txt|epub|mobi|azw3?|pdf|docx|html?|md)$/i, '').trim();
+  var parts = raw.split(/[_＿]+/).map(function (x) { return x.trim(); }).filter(Boolean);
+  return { title: parts[0] || raw, author: parts.length > 1 ? parts.slice(1).join('_') : book.author || '' };
+}
+
+async function matchBookCovers() {
+  await ready;
+  if (matchingCovers) return;
+  matchingCovers = true;
+  var matchedCount = 0;
+  $('metadataStatus').textContent = '正在匹配书间网页数据…';
+  try {
+    for (var i = 0; i < books.length; i++) {
+      var book = books[i];
+      try {
+        var identity = bookIdentity(book);
+        var data={books:await lookupCatalog(identity.title)};
+        var candidates = data.books.filter(function (b) { return normalizedTitle(b.title) === normalizedTitle(identity.title); });
+        if (identity.author) candidates = candidates.filter(function (b) { return normalizedTitle(b.author) === normalizedTitle(identity.author); });
+        if (candidates.length > 1 && new Set(candidates.map(function (b) { return b.author || ''; })).size > 1) continue;
+        var matched = candidates.sort(function (a, b) {
+          return Number(Boolean(b.cover_url)) + Number(Boolean(b.intro)) - Number(Boolean(a.cover_url)) - Number(Boolean(a.intro));
+        })[0];
+        if (matched) {
+          if (matched.cover_url) book.cover_url = matched.cover_url;
+          if (matched.author) book.author = matched.author;
+          if (matched.intro) book.intro = matched.intro;
+          matchedCount++;
+          book.shujianId = matched.id;
+          book.displayTitle = matched.title;
+          await save(book);
+        }
+      } catch (e) {
+        $('metadataStatus').textContent = '连接失败：' + (e && e.message ? e.message : e);
+        draw();
+        return;
+      }
+    }
+    $('metadataStatus').textContent = '书间网页数据 · 已匹配 ' + matchedCount + ' / ' + books.length + ' 本';
+    draw();
+  } finally {
+    matchingCovers = false;
+  }
+}
+
+/* ------------------------------------------------------------------ 启动 */
+
+var icons = {
+  list: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.1M4 12h.1M4 18h.1"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+  settings: '<path d="m4 19 6-14 6 14M6 14h8M18 9h4M20 7v4"/>',
+  note: '<path d="M19 12v8H4V5h8M12 13l8-9 2 2-9 9-4 1z"/>',
+  bookmark: '<path d="M6 3h12v18l-6-4-6 4z"/>',
+  up: '<path d="m5 14 7-7 7 7M12 7v14M5 3h14"/>'
+};
+document.querySelectorAll('[data-icon]').forEach(function (b) {
+  b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' + icons[b.dataset.icon] + '</svg>';
+});
+
+setIndent(localStorage.shuyuIndent !== undefined ? localStorage.shuyuIndent : 2);
+setFont(font);
+setTypeface(localStorage.shuyuTypeface || 'sans');
+setLeading(Number(localStorage.shuyuLeading) || 1.95);
+setTheme(localStorage.mohaiTheme || '');
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closePanels();
+});
+
+
+var catalogCache={};
+async function lookupCatalog(title){let normalized=normalizedTitle(title),hash=2166136261;for(let ch of normalized)hash=Math.imul(hash^ch.codePointAt(0),16777619)>>>0;let bucket=hash%32;if(!catalogCache[bucket])catalogCache[bucket]=fetch('./data/'+bucket+'.json.gz').then(async r=>{if(!r.ok)throw Error('书间网页数据暂时不可用');let stream=r.body.pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())});let rows=await catalogCache[bucket];return rows.filter(r=>normalizedTitle(r[0])===normalized).map(r=>({title:r[0],author:r[1],intro:r[2],cover_url:r[3]}))}
+function plainHTML(text){let doc=new DOMParser().parseFromString(text,'text/html');doc.querySelectorAll('script,style,iframe,object').forEach(e=>e.remove());return [...doc.body.querySelectorAll('h1,h2,h3,h4,p,li')].map(e=>e.textContent).join('\n\n')||doc.body.textContent}
+async function browserConvert(file){let ext=file.name.split('.').pop().toLowerCase();if(ext==='pdf'){let pdfjs=await import('./vendor/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc=new URL('./vendor/pdf.worker.min.mjs',location.href).href;let doc=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise,parts=[];for(let n=1;n<=doc.numPages;n++){let page=await doc.getPage(n),content=await page.getTextContent();parts.push(content.items.map(i=>i.str+(i.hasEOL?'\n':' ')).join(''))}return parts.join('\n\n')}
+if(!['epub','docx','fb2','rtf'].includes(ext))throw Error('该格式请先用 Calibre 转为 EPUB 或 TXT，再导入网页版');if(ext==='rtf')throw Error('RTF 请先另存为 TXT 或 EPUB');if(ext==='fb2'){let doc=new DOMParser().parseFromString(await file.text(),'application/xml');return [...doc.querySelectorAll('title,p')].map(e=>e.textContent).join('\n\n')}
+let zip=await JSZip.loadAsync(await file.arrayBuffer()),total=0;for(let f of Object.values(zip.files)){total+=f._data?.uncompressedSize||0;if(total>100*1024*1024)throw Error('解压后文件过大')}
+if(ext==='docx'){let source=await zip.file('word/document.xml')?.async('string');if(!source)throw Error('DOCX 文件不完整');let doc=new DOMParser().parseFromString(source,'application/xml');return [...doc.getElementsByTagNameNS('*','p')].map(p=>[...p.getElementsByTagNameNS('*','t')].map(t=>t.textContent).join('')).join('\n\n')}
+let container=new DOMParser().parseFromString(await zip.file('META-INF/container.xml').async('string'),'application/xml'),opf=container.getElementsByTagNameNS('*','rootfile')[0].getAttribute('full-path'),doc=new DOMParser().parseFromString(await zip.file(opf).async('string'),'application/xml'),base=opf.includes('/')?opf.slice(0,opf.lastIndexOf('/')+1):'',items={};for(let item of doc.getElementsByTagNameNS('*','item'))items[item.id||item.getAttribute('id')]=item.getAttribute('href');let parts=[];for(let ref of doc.getElementsByTagNameNS('*','itemref')){let href=items[ref.getAttribute('idref')];if(!href)continue;let path=new URL(base+decodeURIComponent(href),'https://book.local/').pathname.slice(1).split('#')[0],entry=zip.file(path);if(entry)parts.push(plainHTML(await entry.async('string')))}return parts.join('\n\n')}
+
+ready.then(function () { matchBookCovers(); }).catch(function () { });
+</script></body></html>
