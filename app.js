@@ -191,14 +191,14 @@ async function dlPoll(){
   const tasks=dlState.jobs.filter(j=>j.kind==='download');
   for(const j of tasks){if(j.state==='done'&&j.validation?.warnings?.length&&!dlValidationReported.has(j.id)){dlValidationReported.add(j.id);alert('《'+(j.title||'小说')+'》下载完整性提醒\n\n'+j.validation.warnings.join('\n')+'\n\n'+j.validation.reference_note+'\n文件已保留，可换源重新下载。')}}
   if(!$('#downloaddialog').open)for(const j of tasks)if(j.state==='done')dlDismissed.add(j.id);
-  $('#dltasks').innerHTML=tasks.filter(j=>j.state!=='error'&&j.state!=='cancelled'&&!dlDismissed.has(j.id)).map((j,i)=>`<article class="dl-task"><div class="dl-taskhead"><strong>${E(j.title||'准备下载')}</strong><span>${Math.round(j.progress*100)}%</span></div><progress value="${j.progress}" max="1" style="accent-color:${['#4d8669','#5c8dc5','#b18a50','#9772ba'][i%4]}"></progress><div class="dl-taskhead"><span class="small muted">${E(j.message)}${j.validation?' · '+j.validation.successful_chapters+'/'+j.validation.toc_chapters+'章 · '+j.validation.body_characters.toLocaleString()+'字 · '+(j.validation.file_bytes/1024).toFixed(1)+'KB'+(j.validation.warnings.length?' · ⚠ 请核对完整性':' · 统计校验通过'):''}</span>${j.state==='done'?`<a href="${LOCAL_BACKEND}/api/downloader/file/${j.id}">保存文件 ↓</a>`:`<button class="chip" data-dl-cancel="${j.id}">停止下载</button>`}</div></article>`).join('')||'<p class="muted small">暂无下载任务。完成的文件保留在本机下载目录。</p>';
+  $('#dltasks').innerHTML=tasks.filter(j=>j.state!=='error'&&j.state!=='cancelled'&&!dlDismissed.has(j.id)).map((j,i)=>`<article class="dl-task"><div class="dl-taskhead"><strong>${E(j.title||'准备下载')}</strong><span>${Math.round(j.progress*100)}%</span></div><progress value="${j.progress}" max="1" style="accent-color:${['#4d8669','#5c8dc5','#b18a50','#9772ba'][i%4]}"></progress><div class="dl-taskhead"><span class="small muted">${E(j.message)}${j.validation?' · '+j.validation.successful_chapters+'/'+j.validation.toc_chapters+'章 · '+j.validation.body_characters.toLocaleString()+'字 · '+(j.validation.file_bytes/1024).toFixed(1)+'KB'+(j.validation.warnings.length?' · ⚠ 请核对完整性':' · 统计校验通过'):''}</span>${j.file_removed?'临时文件已清理':j.state==='done'?`<a href="${LOCAL_BACKEND}/api/downloader/file/${j.id}">保存文件 ↓</a>`:`<button class="chip" data-dl-cancel="${j.id}">停止下载</button>`}</div></article>`).join('')||'<p class="muted small">暂无下载任务。完成的文件保留在本机下载目录。</p>';
   for(const j of tasks){if(j.state!=='running'){dlTracked.delete(j.id);if((j.state==='error'||j.state==='cancelled')&&!dlReported.has(j.id)){dlReported.add(j.id);toast((j.title||'下载')+'：'+j.message);$('#dlmessage').textContent=(j.title||'下载')+'：'+j.message}}}
   const active=tasks.filter(j=>j.state==='running').length;$('#downloadhub').textContent='找源与下载'+(active?' · '+active:'');
  }catch(e){$('#dlmessage').textContent=e.message}finally{dlBusy=false}
 }
 document.addEventListener('click',async e=>{
  const btn=e.target.closest('[data-dl-id],[data-dl-cancel]');if(!btn)return;btn.disabled=true;
- try{if(btn.dataset.dlCancel)await dlAPI('cancel',{id:btn.dataset.dlCancel});else{const item=dlState.jobs.flatMap(j=>j.results).find(r=>r.id===btn.dataset.dlId);if(item&&!item.author&&!confirm('该来源未提供作者，请核对书名。继续下载？'))return;const j=await dlAPI('download',{id:btn.dataset.dlId,format:btn.dataset.dlFormat});dlTracked.add(j.id);toast('已加入下载任务')}await dlPoll()}catch(e){error(e)}finally{if(btn.isConnected)btn.disabled=false}
+ try{if(btn.dataset.dlCancel)await dlAPI('cancel',{id:btn.dataset.dlCancel});else{const item=dlState.jobs.flatMap(j=>j.results).find(r=>r.id===btn.dataset.dlId);if(item&&!item.author&&!confirm('该来源未提供作者，请核对书名。继续下载？'))return;const j=await dlAPI('download',{id:btn.dataset.dlId,format:btn.dataset.dlFormat});dlTracked.add(j.id);dlOwned.add(j.id);toast('已加入下载任务')}await dlPoll()}catch(e){error(e)}finally{if(btn.isConnected)btn.disabled=false}
 });
 setInterval(dlPoll,1000);
 
@@ -212,3 +212,6 @@ $('#downloaddialog').addEventListener('close',()=>{
   if($('#downloaddialog').open)dlPoll();
  }).catch(()=>{});
 });
+
+const dlOwned=new Set();
+window.addEventListener('pagehide',()=>{if(!token||!dlOwned.size)return;fetch(LOCAL_BACKEND+'/api/downloader/cleanup',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json','X-Local-Token':token},body:JSON.stringify({ids:[...dlOwned].slice(-200)})}).catch(()=>{});});
