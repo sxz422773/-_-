@@ -153,7 +153,7 @@ setInterval(()=>{if($('#syncdialog').open)xkongStatus().catch(()=>{})},4000);
 
 // Integrated source search and download workspace.
 const dlLatency=r=>typeof r.latency_ms==='number'&&Number.isFinite(r.latency_ms)&&r.latency_ms>0?r.latency_ms:Infinity;
-let dlSearchId=null,dlAuthor='',dlState={jobs:[]},dlSig='',dlBusy=false,dlTracked=new Set(),dlReported=new Set(),dlDismissed=new Set();
+let dlSearchId=null,dlAuthor='',dlState={jobs:[]},dlSig='',dlBusy=false,dlTracked=new Set(),dlReported=new Set(),dlDismissed=new Set(),dlValidationReported=new Set();
 const dlAPI=(action,data)=>api('/api/downloader/'+action,data);
 async function openDownloadHub(title='',author=''){
  $('#downloaddialog').showModal();
@@ -189,8 +189,9 @@ async function dlPoll(){
    }
   }
   const tasks=dlState.jobs.filter(j=>j.kind==='download');
+  for(const j of tasks){if(j.state==='done'&&j.validation?.warnings?.length&&!dlValidationReported.has(j.id)){dlValidationReported.add(j.id);alert('《'+(j.title||'小说')+'》下载完整性提醒\n\n'+j.validation.warnings.join('\n')+'\n\n'+j.validation.reference_note+'\n文件已保留，可换源重新下载。')}}
   if(!$('#downloaddialog').open)for(const j of tasks)if(j.state==='done')dlDismissed.add(j.id);
-  $('#dltasks').innerHTML=tasks.filter(j=>j.state!=='error'&&j.state!=='cancelled'&&!dlDismissed.has(j.id)).map((j,i)=>`<article class="dl-task"><div class="dl-taskhead"><strong>${E(j.title||'准备下载')}</strong><span>${Math.round(j.progress*100)}%</span></div><progress value="${j.progress}" max="1" style="accent-color:${['#4d8669','#5c8dc5','#b18a50','#9772ba'][i%4]}"></progress><div class="dl-taskhead"><span class="small muted">${E(j.message)}</span>${j.state==='done'?`<a href="${LOCAL_BACKEND}/api/downloader/file/${j.id}">保存文件 ↓</a>`:`<button class="chip" data-dl-cancel="${j.id}">停止下载</button>`}</div></article>`).join('')||'<p class="muted small">暂无下载任务。完成的文件保留在本机下载目录。</p>';
+  $('#dltasks').innerHTML=tasks.filter(j=>j.state!=='error'&&j.state!=='cancelled'&&!dlDismissed.has(j.id)).map((j,i)=>`<article class="dl-task"><div class="dl-taskhead"><strong>${E(j.title||'准备下载')}</strong><span>${Math.round(j.progress*100)}%</span></div><progress value="${j.progress}" max="1" style="accent-color:${['#4d8669','#5c8dc5','#b18a50','#9772ba'][i%4]}"></progress><div class="dl-taskhead"><span class="small muted">${E(j.message)}${j.validation?' · '+j.validation.successful_chapters+'/'+j.validation.toc_chapters+'章 · '+j.validation.body_characters.toLocaleString()+'字 · '+(j.validation.file_bytes/1024).toFixed(1)+'KB'+(j.validation.warnings.length?' · ⚠ 请核对完整性':' · 统计校验通过'):''}</span>${j.state==='done'?`<a href="${LOCAL_BACKEND}/api/downloader/file/${j.id}">保存文件 ↓</a>`:`<button class="chip" data-dl-cancel="${j.id}">停止下载</button>`}</div></article>`).join('')||'<p class="muted small">暂无下载任务。完成的文件保留在本机下载目录。</p>';
   for(const j of tasks){if(j.state!=='running'){dlTracked.delete(j.id);if((j.state==='error'||j.state==='cancelled')&&!dlReported.has(j.id)){dlReported.add(j.id);toast((j.title||'下载')+'：'+j.message);$('#dlmessage').textContent=(j.title||'下载')+'：'+j.message}}}
   const active=tasks.filter(j=>j.state==='running').length;$('#downloadhub').textContent='找源与下载'+(active?' · '+active:'');
  }catch(e){$('#dlmessage').textContent=e.message}finally{dlBusy=false}
